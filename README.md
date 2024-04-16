@@ -1,3 +1,3 @@
-# Northcoders News API
+# News API
 
-For instructions, please head over to [L2C NC News](https://l2c.northcoders.com/courses/be/nc-news).
+you will need to assign your PGDATABASE a name in a .env file otherwise your database will not connect successfully.
