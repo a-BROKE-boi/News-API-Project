@@ -37,3 +37,20 @@ describe("GET /api/topics", () => {
       });
   });
 });
+
+describe("GET /api", () => {
+  describe("should return a json file list of all the tables avalable in the db", () => {
+    it("discription of each table", () => {
+      const testJson = require("../endpoints.json");
+      return request(app)
+        .get("/api")
+        .expect(200)
+        .then(({ body }) => {
+          // body.msg.forEach((table) => {
+          //   expect(typeof table.description).toBe("string")
+          // })
+          expect(body.msg).toEqual(testJson);
+        });
+    });
+  });
+});
