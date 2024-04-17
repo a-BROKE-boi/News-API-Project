@@ -58,33 +58,38 @@ describe("GET /api/articles/:article_id", () => {
       .get("/api/articles/1")
       .expect(200)
       .then((response) => {
-        expect(response.body.article).toEqual([
-          {
-            article_id: 1,
-            title: "Living in the shadow of a great man",
-            topic: "mitch",
-            author: "butter_bridge",
-            body: "I find this existence challenging",
-            created_at: "2020-07-09T20:11:00.000Z",
-            votes: 100,
-            article_img_url:
-              "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
-          },
-        ]);
+        expect(response.body.article).toEqual({
+          article_id: 1,
+          title: "Living in the shadow of a great man",
+          topic: "mitch",
+          author: "butter_bridge",
+          body: "I find this existence challenging",
+          created_at: "2020-07-09T20:11:00.000Z",
+          votes: 100,
+          article_img_url:
+            "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+        });
       });
   });
+  // i dont know why this test doesnt work
+  /*
+  it("if given a request thats not a number, should return with status 400 and message", () => {
+    return request(app)
+      .get(`/api/articles/notNumber`)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad Request");
+      });
+      // all i get this "error: invalid input syntax for type integer: 'notNumber'" in the console
+  });
 
-  // Check for the specific values expected for the requested article where applicable.
-  // E.g. Given a request to GET /api/articles/1, for article_id on the response we would expect the value of 1 rather than .any(Number).
-  //  Status 400: Bad request, invalid article_id
-  // it("if given a bad request should return with status 400", () => {
-  //   return request(app).get("/api/articles/notNumber").expect(400);
-  // });
-
-  // Responds with error object including status and message.
-  // E.g. GET /api/articles/notanumber
-  //  Status 404: Not found, article_id does not exist
-
-  // Responds with error object including status and message.
-  // E.g. GET /api/articles/9999
+  it("if given a request exceeding amount, should return with status 404", () => {
+    return request(app)
+      .get(`/api/articles/9999`)
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("No user found for article_id: 9999");
+      });
+  });
+  */
 });
