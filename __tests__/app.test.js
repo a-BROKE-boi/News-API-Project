@@ -24,7 +24,7 @@ describe("app.js", () => {
 });
 
 describe("GET /api/topics", () => {
-  it("should respond with an array of topic objects, with the these properties. slug. description", () => {
+  it("check if its the expected shape and length", () => {
     return request(app)
       .get("/api/topics")
       .expect(200)
@@ -40,16 +40,13 @@ describe("GET /api/topics", () => {
 
 describe("GET /api", () => {
   describe("should return a json file list of all the tables avalable in the db", () => {
-    it("discription of each table", () => {
+    it("check length and if each key has a description of file", () => {
       const testJson = require("../endpoints.json");
       return request(app)
         .get("/api")
         .expect(200)
-        .then(({ body }) => {
-          // body.msg.forEach((table) => {
-          //   expect(typeof table.description).toBe("string")
-          // })
-          expect(body.msg).toEqual(testJson);
+        .then((response) => {
+          expect(response.body).toEqual(testJson);
         });
     });
   });
