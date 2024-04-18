@@ -6,7 +6,9 @@ exports.getArticle = (request, response, next) => {
     .then((article) => {
       response.status(200).send({ article });
     })
-    .catch(next);
+    .catch((error) => {
+      next(error);
+    });
 };
 
 exports.getAllArticles = (request, response, next) => {

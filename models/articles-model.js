@@ -6,7 +6,6 @@ exports.fetchArticle = (article_id) => {
     .then(({ rows }) => {
       const article = rows[0];
       if (!article) {
-        console.log("we are error");
         return Promise.reject({
           status: 404,
           msg: `No user found for article id: ${article_id}`,
