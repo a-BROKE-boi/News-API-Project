@@ -3,6 +3,7 @@ const db = require("../db/connection");
 const seed = require("../db/seeds/seed");
 const data = require("../db/data/test-data");
 const request = require("supertest");
+const commentsDB = require("../db/data/test-data/comments");
 
 beforeEach(() => {
   return seed(data);
@@ -71,17 +72,16 @@ describe("GET /api/articles/:article_id", () => {
         });
       });
   });
-  /*
+
   it("if given a request thats not a number, should return with status 400 and message", () => {
     return request(app)
       .get(`/api/articles/notID`)
       .expect(400)
       .then(({ body }) => {
-        expect(body.msg).toBe("Invalid input");
+        expect(body.msg).toBe("bad Request");
       });
-    // all i get this "error: invalid input syntax for type integer: 'notNumber'" in the console
   });
-  
+
   it("if given a request exceeding amount, should return with status 404", () => {
     return request(app)
       .get(`/api/articles/9999`)
@@ -90,7 +90,6 @@ describe("GET /api/articles/:article_id", () => {
         expect(body.msg).toBe("No user found for article id: 9999");
       });
   });
-  */
 });
 
 describe("GET /api/articles", () => {
@@ -118,6 +117,45 @@ describe("GET /api/articles", () => {
       .expect(404)
       .then(({ body }) => {
         expect(body.msg).toBe("Invalid path");
+      });
+  });
+});
+
+describe("GET /api/articles/:article_id/comments", () => {
+  it("should return an array of comments, check shape and length", () => {
+    const articleId = 2;
+    const arrayOfIdComments = commentsDB.filter(
+      (comment) => comment.article_id == articleId
+    );
+    return request(app)
+      .get(`/api/articles/${articleId}/comments`)
+      .expect(200)
+      .then((response) => {
+        expect(Array.isArray(response.body.comment)).toBe(true);
+        expect(response.body.comment.length).toBe(arrayOfIdComments.length);
+        response.body.comment.forEach((commentInArr) => {
+          expect(typeof commentInArr.comment_id).toBe("number");
+          expect(typeof commentInArr.body).toBe("string");
+          expect(typeof commentInArr.article_id).toBe("number");
+          expect(typeof commentInArr.author).toBe("string");
+          expect(typeof commentInArr.votes).toBe("number");
+          expect(typeof commentInArr.created_at).toBe("string");
+        });
+      });
+  });
+  it("checks if the array is in date order first being the most recent", () => {
+    return request(app)
+      .get("/api/articles/1/comments")
+      .expect(200)
+      .then((response) => {
+        expect(response.body.comment[0]).toEqual({
+          article_id: 1,
+          author: "icellusedkars",
+          body: "I hate streaming noses",
+          comment_id: 5,
+          created_at: "2020-11-03T21:00:00.000Z",
+          votes: 0,
+        });
       });
   });
 });
