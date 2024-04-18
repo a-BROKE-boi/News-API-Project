@@ -94,11 +94,12 @@ describe("GET /api/articles/:article_id", () => {
 });
 
 describe("GET /api/articles", () => {
-  it("array of article objects, checks if its the expected shape and length", () => {
+  it("should return an array of article objects and if its the expected shape and length", () => {
     return request(app)
       .get("/api/articles")
       .expect(200)
       .then((response) => {
+        expect(Array.isArray(response.body)).toBe(true);
         expect(response.body.length).toBe(13);
         response.body.forEach((article) => {
           expect(typeof article.title).toBe("string");
@@ -109,6 +110,14 @@ describe("GET /api/articles", () => {
           expect(typeof article.votes).toBe("number");
           expect(article.body).toBe(undefined);
         });
+      });
+  });
+  it("if given a bad request it should return an error message", () => {
+    return request(app)
+      .get("/api/notArticle")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Invalid path");
       });
   });
 });
