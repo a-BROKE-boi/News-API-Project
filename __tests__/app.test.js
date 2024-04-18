@@ -71,25 +71,44 @@ describe("GET /api/articles/:article_id", () => {
         });
       });
   });
-  // i dont know why this test doesnt work
   /*
   it("if given a request thats not a number, should return with status 400 and message", () => {
     return request(app)
-      .get(`/api/articles/notNumber`)
+      .get(`/api/articles/notID`)
       .expect(400)
       .then(({ body }) => {
-        expect(body.msg).toBe("Bad Request");
+        expect(body.msg).toBe("Invalid input");
       });
-      // all i get this "error: invalid input syntax for type integer: 'notNumber'" in the console
+    // all i get this "error: invalid input syntax for type integer: 'notNumber'" in the console
   });
-
+  
   it("if given a request exceeding amount, should return with status 404", () => {
     return request(app)
       .get(`/api/articles/9999`)
       .expect(404)
       .then(({ body }) => {
-        expect(body.msg).toBe("No user found for article_id: 9999");
+        expect(body.msg).toBe("No user found for article id: 9999");
       });
   });
   */
+});
+
+describe("GET /api/articles", () => {
+  it("array of article objects, checks if its the expected shape and length", () => {
+    return request(app)
+      .get("/api/articles")
+      .expect(200)
+      .then((response) => {
+        expect(response.body.length).toBe(13);
+        response.body.forEach((article) => {
+          expect(typeof article.title).toBe("string");
+          expect(typeof article.topic).toBe("string");
+          expect(typeof article.author).toBe("string");
+          expect(typeof article.created_at).toBe("string");
+          expect(typeof article.article_img_url).toBe("string");
+          expect(typeof article.votes).toBe("number");
+          expect(article.body).toBe(undefined);
+        });
+      });
+  });
 });
