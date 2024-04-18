@@ -1,7 +1,6 @@
 const db = require("../db/connection");
 
 exports.fetchArticle = (article_id) => {
-  console.log("we are model");
   return db
     .query(`SELECT * FROM articles WHERE article_id=$1;`, [article_id])
     .then(({ rows }) => {
