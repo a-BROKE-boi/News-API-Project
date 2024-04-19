@@ -158,4 +158,64 @@ describe("GET /api/articles/:article_id/comments", () => {
         });
       });
   });
+  it("should return an empty array empty array if article id is valid, but no comments", () => {
+    return request(app)
+      .get("/api/articles/2/comments")
+      .expect(200)
+      .then((response) => {
+        expect(response.body.comment).toEqual([]);
+      });
+  });
+  it("should return a 400 when given an invalid article id", () => {
+    return request(app)
+      .get("/api/articles/notID/comments")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad Request");
+      });
+  });
+  it("should return a 404 when given an invalid article id", () => {
+    return request(app)
+      .get("/api/articles/9999/comments")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Invalid path");
+      });
+  });
+});
+
+describe("POST /api/articles/:article_id/comments", () => {
+  it("should accept a username and body and return the comment", () => {
+    const userComment = { username: "butter_bridge", body: "this is chill" };
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send(userComment)
+      .expect(201)
+      .then((response) => {
+        expect(response.body.comment.body).toBe("this is chill");
+        expect(typeof response.body.comment.votes).toBe("number");
+        expect(response.body.comment.author).toBe("butter_bridge");
+        expect(typeof response.body.comment.article_id).toBe("number");
+        expect(typeof response.body.comment.created_at).toBe("string");
+      });
+  });
+  it("when passed more than two keys still passes", () => {
+    const userComment = {
+      username: "butter_bridge",
+      body: "this is chill",
+      beans: "yummy",
+    };
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send(userComment)
+      .expect(201)
+      .then((response) => {
+        expect(response.body.comment.body).toBe("this is chill");
+        expect(typeof response.body.comment.votes).toBe("number");
+        expect(response.body.comment.author).toBe("butter_bridge");
+        expect(typeof response.body.comment.article_id).toBe("number");
+        expect(typeof response.body.comment.created_at).toBe("string");
+        expect(typeof response.body.comment.beans).toBe("undefined");
+      });
+  });
 });
