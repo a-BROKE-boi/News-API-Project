@@ -174,7 +174,7 @@ describe("GET /api/articles/:article_id/comments", () => {
         expect(body.msg).toBe("Bad Request");
       });
   });
-  it("should return a 404 when given an invalid article id", () => {
+  it("passed a valid id type but not in DB return 404 status ", () => {
     return request(app)
       .get("/api/articles/9999/comments")
       .expect(404)
@@ -199,7 +199,7 @@ describe("POST /api/articles/:article_id/comments", () => {
         expect(typeof response.body.comment.created_at).toBe("string");
       });
   });
-  it("when passed more than two keys still passes", () => {
+  it("when passed more than two keys 201 status and they dont get added to the table", () => {
     const userComment = {
       username: "butter_bridge",
       body: "this is chill",
@@ -218,4 +218,36 @@ describe("POST /api/articles/:article_id/comments", () => {
         expect(typeof response.body.comment.beans).toBe("undefined");
       });
   });
+  it("when passed an invalid id should return 400 status ", () => {
+    return request(app)
+      .post("/api/articles/notID/comments")
+      .send()
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("bad Request");
+      });
+  });
+  it("passed a valid id type but id is not in DB return 404 status ", () => {
+    const userComment = { username: "butter_bridge", body: "this is chill" };
+
+    return request(app)
+      .post("/api/articles/9999/comments")
+      .send(userComment)
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Invalid path");
+      });
+  });
+  it("when sending an object if any of the parameters are missing status 400 ", () => {
+    const userComment = { username: "butter_bridge" };
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send(userComment)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("bad Request");
+      });
+  });
+  // 404 no username/ doesnt exist in database
+  // e.g. usercomment = (username : caio)
 });
