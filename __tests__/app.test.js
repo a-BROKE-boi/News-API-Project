@@ -248,7 +248,6 @@ describe("POST /api/articles/:article_id/comments", () => {
         expect(body.msg).toBe("bad Request");
       });
   });
-
   it("passed a valid id type but username doesnt exist in database return 404 status ", () => {
     const userComment = {
       username: "notValidUsername",
@@ -260,6 +259,20 @@ describe("POST /api/articles/:article_id/comments", () => {
       .expect(404)
       .then(({ body }) => {
         expect(body.msg).toBe("username does not exist");
+      });
+  });
+});
+
+describe("PATCH /api/articles/:article_id", () => {
+  it("updates the votes in a article by its id", () => {
+    const newVote = 20;
+    const articleVotesMod = { inc_votes: newVote };
+    return request(app)
+      .patch("/api/articles/1")
+      .send(articleVotesMod)
+      .expect(200)
+      .then((response) => {
+        expect(response.body.votes).toBe(100 + newVote);
       });
   });
 });

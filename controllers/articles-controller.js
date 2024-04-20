@@ -1,5 +1,9 @@
-const { request } = require("../app");
-const { fetchArticle, fetchAllArticles } = require("../models/articles-model");
+const { request, response } = require("../app");
+const {
+  fetchArticle,
+  fetchAllArticles,
+  updateArticle,
+} = require("../models/articles-model");
 
 exports.getArticle = (request, response, next) => {
   const { article_id } = request.params;
@@ -15,5 +19,13 @@ exports.getArticle = (request, response, next) => {
 exports.getAllArticles = (request, response, next) => {
   fetchAllArticles().then((allArticles) => {
     response.status(200).send(allArticles);
+  });
+};
+
+exports.patchArticle = (request, response, next) => {
+  const votesNum = request.body.inc_votes;
+  const articleID = request.params.article_id;
+  updateArticle(votesNum, articleID).then((updatedArticle) => {
+    response.status(200).send(updatedArticle);
   });
 };

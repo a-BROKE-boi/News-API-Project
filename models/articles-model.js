@@ -25,3 +25,16 @@ exports.fetchAllArticles = () => {
       return result.rows;
     });
 };
+
+exports.updateArticle = (votesNum, articleID) => {
+  // we need to update the table with a new vote number we need the
+  // new vote number to be added onto the old
+  return db
+    .query(
+      `UPDATE articles SET votes = votes + $1 WHERE article_id=$2 RETURNING *;`,
+      [votesNum, articleID]
+    )
+    .then(({ rows }) => {
+      return rows[0];
+    });
+};

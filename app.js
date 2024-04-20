@@ -4,6 +4,7 @@ const { getTopics } = require("./controllers/topics-controller.js");
 const {
   getArticle,
   getAllArticles,
+  patchArticle,
 } = require("./controllers/articles-controller.js");
 const {
   getComments,
@@ -26,6 +27,8 @@ app.get("/api/articles", getAllArticles);
 app.get("/api/articles/:article_id/comments", getComments);
 
 app.post("/api/articles/:article_id/comments", postComment);
+
+app.patch("/api/articles/:article_id", patchArticle);
 
 // 404 path not found
 app.all("*", (req, res, next) => {
