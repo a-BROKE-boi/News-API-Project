@@ -19,8 +19,7 @@ exports.fetchComments = (article_id) => {
 };
 
 exports.insertComment = (body, articleID, username) => {
-  console.log(body, username);
-  if (body === undefined || !username === undefined) {
+  if (body === undefined || username === undefined) {
     return Promise.reject({
       status: 400,
       msg: "bad Request",

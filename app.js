@@ -45,11 +45,13 @@ app.use((err, req, res, next) => {
     res.status(400).send({ msg: "bad Request" });
   } else if (err.code === "42703") {
     res.status(400).send({ msg: "Bad Request" });
+  } else if (err.code === "23503") {
+    res.status(404).send({ msg: "username does not exist" });
   } else next(err);
 });
 
 app.use((err, req, res, next) => {
-  // console.log(err);
+  console.log(err);
   res.status(500).send({ msg: "Internal Server Error" });
 });
 

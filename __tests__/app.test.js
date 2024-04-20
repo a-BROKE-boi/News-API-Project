@@ -219,9 +219,10 @@ describe("POST /api/articles/:article_id/comments", () => {
       });
   });
   it("when passed an invalid id should return 400 status ", () => {
+    const userComment = { username: "butter_bridge", body: "this is chill" };
     return request(app)
       .post("/api/articles/notID/comments")
-      .send()
+      .send(userComment)
       .expect(400)
       .then(({ body }) => {
         expect(body.msg).toBe("bad Request");
@@ -229,7 +230,6 @@ describe("POST /api/articles/:article_id/comments", () => {
   });
   it("passed a valid id type but id is not in DB return 404 status ", () => {
     const userComment = { username: "butter_bridge", body: "this is chill" };
-
     return request(app)
       .post("/api/articles/9999/comments")
       .send(userComment)
@@ -239,7 +239,7 @@ describe("POST /api/articles/:article_id/comments", () => {
       });
   });
   it("when sending an object if any of the parameters are missing status 400 ", () => {
-    const userComment = { username: "butter_bridge" };
+    const userComment = {};
     return request(app)
       .post("/api/articles/1/comments")
       .send(userComment)
@@ -248,6 +248,18 @@ describe("POST /api/articles/:article_id/comments", () => {
         expect(body.msg).toBe("bad Request");
       });
   });
-  // 404 no username/ doesnt exist in database
-  // e.g. usercomment = (username : caio)
+
+  it("passed a valid id type but username doesnt exist in database return 404 status ", () => {
+    const userComment = {
+      username: "notValidUsername",
+      body: "this comment stinks",
+    };
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send(userComment)
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("username does not exist");
+      });
+  });
 });
