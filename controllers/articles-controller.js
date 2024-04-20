@@ -1,3 +1,4 @@
+const { request } = require("../app");
 const { fetchArticle, fetchAllArticles } = require("../models/articles-model");
 
 exports.getArticle = (request, response, next) => {
