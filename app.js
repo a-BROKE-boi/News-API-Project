@@ -9,6 +9,7 @@ const {
 const {
   getComments,
   postComment,
+  deleteComment,
 } = require("./controllers/comments-controller.js");
 const endPointsJson = require("./endpoints.json");
 
@@ -30,6 +31,8 @@ app.post("/api/articles/:article_id/comments", postComment);
 
 app.patch("/api/articles/:article_id", patchArticle);
 
+app.delete("/api/comments/:comment_id", deleteComment);
+
 // 404 path not found
 app.all("*", (req, res, next) => {
   res.status(404).send({ msg: "Invalid path" });
@@ -37,7 +40,6 @@ app.all("*", (req, res, next) => {
 
 //error handles
 app.use((err, req, res, next) => {
-  console.log(err);
   // handle custom errors
   if (err.status && err.msg) {
     res.status(err.status).send({ msg: err.msg });
