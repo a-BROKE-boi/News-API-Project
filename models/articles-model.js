@@ -27,14 +27,20 @@ exports.fetchAllArticles = () => {
 };
 
 exports.updateArticle = (votesNum, articleID) => {
-  // we need to update the table with a new vote number we need the
-  // new vote number to be added onto the old
+  // the psql should be invalid if it cannot find the article id
   return db
     .query(
       `UPDATE articles SET votes = votes + $1 WHERE article_id=$2 RETURNING *;`,
       [votesNum, articleID]
     )
     .then(({ rows }) => {
-      return rows[0];
+      article = rows[0];
+      if (!article) {
+        return Promise.reject({
+          status: 404,
+          msg: `No comment found for article: ${articleID}`,
+        });
+      }
+      return article;
     });
 };

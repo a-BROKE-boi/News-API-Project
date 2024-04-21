@@ -275,4 +275,37 @@ describe("PATCH /api/articles/:article_id", () => {
         expect(response.body.votes).toBe(100 + newVote);
       });
   });
+  it("if given a request thats not a number, should return with status 400 and message", () => {
+    const newVote = 20;
+    const articleVotesMod = { inc_votes: newVote };
+    return request(app)
+      .patch(`/api/articles/notID`)
+      .send(articleVotesMod)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("bad Request");
+      });
+  });
+  it("if given a request exceeding amount, should return with status 404", () => {
+    const newVote = 20;
+    const articleVotesMod = { inc_votes: newVote };
+    return request(app)
+      .patch(`/api/articles/9999`)
+      .send(articleVotesMod)
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("No comment found for article: 9999");
+      });
+  });
+  it("if votes is not a number, should return with status 400 and message", () => {
+    const newVote = NaN;
+    const articleVotesMod = { inc_votes: newVote };
+    return request(app)
+      .patch(`/api/articles/1`)
+      .send(articleVotesMod)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("bad Request");
+      });
+  });
 });
