@@ -171,7 +171,7 @@ describe("GET /api/articles/:article_id/comments", () => {
       .get("/api/articles/notID/comments")
       .expect(400)
       .then(({ body }) => {
-        expect(body.msg).toBe("Bad Request");
+        expect(body.msg).toBe("bad Request");
       });
   });
   it("passed a valid id type but not in DB return 404 status ", () => {
@@ -306,6 +306,31 @@ describe("PATCH /api/articles/:article_id", () => {
       .expect(400)
       .then(({ body }) => {
         expect(body.msg).toBe("bad Request");
+      });
+  });
+});
+
+describe("DELETE /api/comments/:comment_id", () => {
+  it("when passed a comment id deletes that comment", () => {
+    return request(app)
+      .delete("/api/comments/1")
+      .expect(204)
+      .then(() => {});
+  });
+  it("400 Invalid comment_id", () => {
+    return request(app)
+      .delete("/api/comments/notID")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("bad Request");
+      });
+  });
+  it("404 when article_id number that does not exist in db", () => {
+    return request(app)
+      .delete("/api/comments/9999")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("No comment for 9999");
       });
   });
 });

@@ -1,4 +1,6 @@
 const db = require("../db/connection");
+const testDB = require("../db/data/test-data/comments");
+
 exports.fetchComments = (article_id) => {
   return db.query(`SELECT * FROM comments;`).then(({ rows }) => {
     if (rows.length < article_id) {
@@ -9,7 +11,8 @@ exports.fetchComments = (article_id) => {
     } else {
       return db
         .query(
-          `SELECT * FROM comments WHERE article_id = ${article_id} ORDER BY created_at DESC;`
+          `SELECT * FROM comments WHERE article_id=$1 ORDER BY created_at DESC;`,
+          [article_id]
         )
         .then(({ rows }) => {
           return rows;
@@ -42,4 +45,15 @@ exports.insertComment = (body, articleID, username) => {
         });
     }
   });
+};
+
+exports.eraseComment = (comment_id) => {
+  if (testDB.length < comment_id) {
+    return Promise.reject({
+      status: 400,
+      msg: `No comment for ${comment_id}`,
+    });
+  } else {
+    return db.query(`DELETE FROM comments WHERE comment_id=$1 ;`, [comment_id]);
+  }
 };
