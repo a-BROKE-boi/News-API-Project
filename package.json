@@ -2,12 +2,14 @@
   "name": "be-nc-news",
   "version": "1.0.0",
   "description": "bc-nc-news",
-  "main": "index.js",
+  "main": "listen.js",
   "scripts": {
     "setup-dbs": "psql -f ./db/setup.sql",
     "seed": "node ./db/seeds/run-seed.js",
     "test": "jest --detectOpenHandles",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "start": "node listen.js",
+    "seed-prod": "NODE_ENV=production npm run seed"
   },
   "repository": {
     "type": "git",
@@ -25,11 +27,11 @@
     "husky": "^8.0.3",
     "jest": "^27.5.1",
     "jest-extended": "^2.0.0",
-    "pg": "^8.11.5",
     "pg-format": "^1.0.4",
     "supertest": "^6.3.4"
   },
   "dependencies": {
+    "pg": "^8.11.5",
     "dotenv": "^16.0.0"
   },
   "jest": {
