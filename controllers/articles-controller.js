@@ -1,4 +1,3 @@
-const { request, response } = require("../app");
 const {
   fetchArticle,
   fetchAllArticles,
