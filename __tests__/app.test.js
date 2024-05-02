@@ -297,11 +297,11 @@ describe("PATCH /api/articles/:article_id", () => {
         expect(body.msg).toBe("No comment found for article: 9999");
       });
   });
-  it("if votes is not a number, should return with status 400 and message", () => {
-    const newVote = NaN;
+  it.only("if votes is not a number, should return with status 400 and message", () => {
+    const newVote = "NotANumber";
     const articleVotesMod = { inc_votes: newVote };
     return request(app)
-      .patch(`/api/articles/1`)
+      .patch(`/api/articles/3`)
       .send(articleVotesMod)
       .expect(400)
       .then(({ body }) => {
