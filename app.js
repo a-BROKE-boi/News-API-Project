@@ -12,7 +12,9 @@ const {
   deleteComment,
 } = require("./controllers/comments-controller.js");
 const endPointsJson = require("./endpoints.json");
+const cors = require("cors");
 
+app.use(cors());
 app.use(express.json());
 
 app.get("/api", (req, res, next) => {

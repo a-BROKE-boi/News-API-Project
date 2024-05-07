@@ -297,7 +297,7 @@ describe("PATCH /api/articles/:article_id", () => {
         expect(body.msg).toBe("No comment found for article: 9999");
       });
   });
-  it.only("if votes is not a number, should return with status 400 and message", () => {
+  it("if votes is not a number, should return with status 400 and message", () => {
     const newVote = "NotANumber";
     const articleVotesMod = { inc_votes: newVote };
     return request(app)
