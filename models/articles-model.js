@@ -19,7 +19,7 @@ exports.fetchArticle = (article_id) => {
 exports.fetchAllArticles = () => {
   return db
     .query(
-      `SELECT title, topic, author, created_at, article_img_url, votes FROM articles ORDER BY created_at DESC ;`
+      `SELECT article_id, title, topic, author, created_at, article_img_url, votes FROM articles ORDER BY created_at DESC ;`
     )
     .then((result) => {
       return result.rows;

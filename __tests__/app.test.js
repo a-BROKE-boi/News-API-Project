@@ -92,7 +92,7 @@ describe("GET /api/articles/:article_id", () => {
   });
 });
 
-describe("GET /api/articles", () => {
+describe.only("GET /api/articles", () => {
   it("should return an array of article objects and if its the expected shape and length", () => {
     return request(app)
       .get("/api/articles")
@@ -101,6 +101,7 @@ describe("GET /api/articles", () => {
         expect(Array.isArray(response.body)).toBe(true);
         expect(response.body.length).toBe(13);
         response.body.forEach((article) => {
+          expect(typeof article.article_id).toBe("number");
           expect(typeof article.title).toBe("string");
           expect(typeof article.topic).toBe("string");
           expect(typeof article.author).toBe("string");
